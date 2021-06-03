@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
-class Name extends Component{
-    render(){
-        const {value} = this.props
+class Name extends Component {
+    render() {
+        const { value } = this.props
 
-        return(
+        return (
             <span>{value}</span>
         )
     }

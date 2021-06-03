@@ -1,13 +1,13 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
-class Description extends Component{
+class Description extends Component {
 
-    render(){
-        const {value} = this.props
+    render() {
+        const { value } = this.props
 
-        return(
+        return (
             <span>{value}</span>
         )
     }
-    }
+}
 export default Description;

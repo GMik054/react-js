@@ -1,19 +1,19 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Name from './Name';
 import Price from './Price';
 import Description from './Description';
 
-class Product extends Component{
+class Product extends Component {
 
-    render(){
+    render() {
 
-        const {name, price, description} = this.props;
+        const { name, price, description } = this.props;
 
-        return(
+        return (
             <>
-            <Name value = {name} />
-            <Price value = {price}/>
-            <Description value = {description}/>
+                <Name value={name} />
+                <Price value={price} />
+                <Description value={description} />
             </>
         )
     }
