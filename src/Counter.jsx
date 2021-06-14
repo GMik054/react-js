@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 class Counter extends Component {
     constructor(props) {
         super(props);
-        console.log(props.defoultValue);
         this.state = {
             value: props.defoultValue
         }
