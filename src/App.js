@@ -1,9 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
-import Product from './homework-6/Product'
-import Counter from './Counter.jsx'
-import Conditional from './demo/Conditional.jsx'
-import ToDo from './components/ToDo.jsx'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import ToDo from './components/todo/ToDo'
 
 function App() {
   return (
@@ -11,8 +9,8 @@ function App() {
   
       <header className="App-header">
       <ToDo/>
-      <Conditional/>
-      {/*<Product 
+      {/*<Conditional/>
+      <Product 
       name='Banana '
       price='2$'
      description=' Fresh Bananas from Finland ' 
