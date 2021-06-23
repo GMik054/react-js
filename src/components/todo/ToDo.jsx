@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import styles from './todo.module.css'
 import idGenerator from '../../helpers_/idGenerator.jsx'
 import { Container, Row, Col, Card, Button, InputGroup, FormControl } from 'react-bootstrap'
+import Task from "../Task/Task.jsx"
+
 
 class ToDo extends Component {
 
@@ -15,7 +17,7 @@ class ToDo extends Component {
         this.setState({
             value: event.target.value
         })
-    }
+    };
 
     addTask = () => {
 
@@ -39,20 +41,19 @@ class ToDo extends Component {
             value: ""
         })
 
-    }
+    };
 
     deleteTask = (taskID) => {
-        console.log(taskID);
 
         this.setState({
             tasks: this.state.tasks.filter((task) => taskID !== task._id)
         })
-    }
+    };
 
     toggleTask = (taskID) => {
         const selectedTasks = new Set(this.state.selectedTasks);
 
-        if(selectedTasks.has(taskID)) {
+        if (selectedTasks.has(taskID)) {
             selectedTasks.delete(taskID);
         }
         else {
@@ -62,11 +63,33 @@ class ToDo extends Component {
         this.setState({
             selectedTasks
         });
+    };
+
+
+    removeSelectid = () => {
+        const { selectedTasks, tasks } = this.state;
+
+        const newTasks = tasks.filter((task) => {
+            if (selectedTasks.has(task._id)) {
+                return false;
+            }
+            return true;
+        });
+
+        this.setState({
+            tasks: newTasks,
+            selectedTasks: new Set()
+        })
+    };
+
+    handlekeyDown = (event) => {
+        if (event.key === "Enter") {
+            this.addTask();
+        }
     }
 
-
     render() {
-        const { tasks, value } = this.state;
+        const { tasks, value, selectedTasks } = this.state;
 
 
 
@@ -80,24 +103,12 @@ class ToDo extends Component {
                     lg={3}
                     xl={2}
                 >
-                    <Card className={styles.task}>
-                        <Card.Body>
-                            <input
-                                type="checkbox"
-                                onChange={() => this.toggleTask(task._id)} />
-                            <Card.Title>
-                                {task.title}
-                            </Card.Title>
-                            <Card.Text>
-                                Some quick example text to build on
-                  </Card.Text>
-                            <Button
-                                variant="danger"
-                                onClick={() => this.deleteTask(task._id)}
-                            >Delete
-                            </Button>
-                        </Card.Body>
-                    </Card>
+               <Task 
+               data={task}
+               onToggle={this.toggleTask}
+               disabled={!!selectedTasks.size}
+               onDelete={this.deleteTask}
+               />
                 </Col>
             )
         })
@@ -106,7 +117,7 @@ class ToDo extends Component {
             <>
 
                 <Container>
-                    <Row>
+                    <Row className="justify-content-center">
                         <h2>ToDo List</h2>
                         <Col xs={10}>
                             <InputGroup className="mb-3">
@@ -114,15 +125,33 @@ class ToDo extends Component {
                                     placeholder="Recipient's username"
                                     value={value}
                                     onChange={this.handleChange}
+                                    onKeyDown={this.handlekeyDown}
+                                    disabled={!!selectedTasks.size}
                                 />
                                 <Button
                                     variant="outline-primary"
-                                    onClick={this.addTask}>
+                                    onClick={this.addTask}
+                                    disabled={!!selectedTasks.size}
+                                >
                                     Add
                                 </Button>
                             </InputGroup>
                         </Col>
+
+
                     </Row>
+
+                    <Row>
+
+                        <Button
+                            variant="danger"
+                            onClick={this.removeSelectid}
+                            disabled={!selectedTasks.size}
+                        >Delete Selectid
+                        </Button>
+
+                    </Row>
+
                     <Row>
                         {taskComponents}
                     </Row>
