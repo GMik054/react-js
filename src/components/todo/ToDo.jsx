@@ -1,45 +1,27 @@
 import React, { Component } from 'react';
-import styles from './todo.module.css'
-import idGenerator from '../../helpers_/idGenerator.jsx'
-import { Container, Row, Col, Card, Button, InputGroup, FormControl } from 'react-bootstrap'
+// import styles from './todo.module.css'
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import Task from "../Task/Task.jsx"
-
+import NewTask from "../newTask/NewTask"
+import Confirm from '../confirm.jsx';
 
 class ToDo extends Component {
 
     state = {
-        value: "",
         tasks: [],
-        selectedTasks: new Set()
+        selectedTasks: new Set(),
+        showConfirm: false
     }
 
-    handleChange = (event) => {
-        this.setState({
-            value: event.target.value
-        })
-    };
-
-    addTask = () => {
-
-        const value = this.state.value.trim();
-
-        if (!value) {
-            return;
-        }
 
 
-        const newTask = {
-            _id: idGenerator(),
-            title: value
-        }
+    addTask = (newTask) => {
 
         const tasks = [...this.state.tasks, newTask];
 
         this.setState({
-
             tasks,
-            value: ""
-        })
+        });
 
     };
 
@@ -78,18 +60,19 @@ class ToDo extends Component {
 
         this.setState({
             tasks: newTasks,
-            selectedTasks: new Set()
+            selectedTasks: new Set(),
+            showConfirm: false
         })
     };
 
-    handlekeyDown = (event) => {
-        if (event.key === "Enter") {
-            this.addTask();
-        }
+    toggleConfirm=()=>{
+        this.setState({
+            showConfirm: !this.state.showConfirm
+        })
     }
 
     render() {
-        const { tasks, value, selectedTasks } = this.state;
+        const { tasks, selectedTasks, showConfirm} = this.state;
 
 
 
@@ -103,12 +86,12 @@ class ToDo extends Component {
                     lg={3}
                     xl={2}
                 >
-               <Task 
-               data={task}
-               onToggle={this.toggleTask}
-               disabled={!!selectedTasks.size}
-               onDelete={this.deleteTask}
-               />
+                    <Task
+                        data={task}
+                        onToggle={this.toggleTask}
+                        disabled={!!selectedTasks.size}
+                        onDelete={this.deleteTask}
+                    />
                 </Col>
             )
         })
@@ -120,22 +103,12 @@ class ToDo extends Component {
                     <Row className="justify-content-center">
                         <h2>ToDo List</h2>
                         <Col xs={10}>
-                            <InputGroup className="mb-3">
-                                <FormControl
-                                    placeholder="Recipient's username"
-                                    value={value}
-                                    onChange={this.handleChange}
-                                    onKeyDown={this.handlekeyDown}
-                                    disabled={!!selectedTasks.size}
-                                />
-                                <Button
-                                    variant="outline-primary"
-                                    onClick={this.addTask}
-                                    disabled={!!selectedTasks.size}
-                                >
-                                    Add
-                                </Button>
-                            </InputGroup>
+
+                            <NewTask
+                                disabled={!!selectedTasks.size}
+                                onAdd={this.addTask}
+                            />
+
                         </Col>
 
 
@@ -145,7 +118,7 @@ class ToDo extends Component {
 
                         <Button
                             variant="danger"
-                            onClick={this.removeSelectid}
+                            onClick={this.toggleConfirm}
                             disabled={!selectedTasks.size}
                         >Delete Selectid
                         </Button>
@@ -156,12 +129,16 @@ class ToDo extends Component {
                         {taskComponents}
                     </Row>
                 </Container>
+
+                {showConfirm && <Confirm
+                    onClose={this.toggleConfirm}
+                    onConfirm={this.removeSelectid}
+                    count={selectedTasks.size}
+                    />}
             </>
         )
     }
 
 }
-
-
 
 export default ToDo;

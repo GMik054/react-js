@@ -1,16 +1,16 @@
-import React, {Component} from "react";
-import {Card, Button}  from 'react-bootstrap';
-import styles from './task.module.css'
+import React, { Component } from "react";
+import { Card, Button } from 'react-bootstrap';
+import styles from './task.module.css';
+import PropTypes from 'prop-types';
 
-
-class Task extends Component{
+class Task extends Component {
 
     state = {
         selected: false
-    }   
+    }
 
-    handleChange = ()=>{
-        const {data, onToggle} = this.props;
+    handleChange = () => {
+        const { data, onToggle } = this.props;
         onToggle(data._id);
 
         this.setState({
@@ -19,35 +19,42 @@ class Task extends Component{
     };
 
 
-    render(){
+    render() {
 
         const task = this.props.data;
-        const {disabled, onDelete}= this.props;
-        const {selected}= this.state;
+        const { disabled, onDelete } = this.props;
+        const { selected } = this.state;
 
 
-        return(
+        return (
             <Card className={`${styles.task} ${selected ? styles.selected : ""}`}>
-                        <Card.Body>
-                            <input
-                                type="checkbox"
-                                onChange={this.handleChange} />
-                            <Card.Title>
-                                {task.title}
-                            </Card.Title>
-                            <Card.Text>
-                                Some quick example text to build on
-                            </Card.Text>
-                            <Button
-                                variant="danger"
-                                disabled={disabled}
-                                onClick={() => onDelete(task._id)}
-                            >Delete
-                            </Button>
-                        </Card.Body>
-                    </Card>
+                <Card.Body>
+                    <input
+                        type="checkbox"
+                        onChange={this.handleChange} />
+                    <Card.Title>
+                        {task.title}
+                    </Card.Title>
+                    <Card.Text>
+                        Some quick example text to build on
+                    </Card.Text>
+                    <Button
+                        variant="danger"
+                        disabled={disabled}
+                        onClick={() => onDelete(task._id)}
+                    >Delete
+                    </Button>
+                </Card.Body>
+            </Card>
         )
     }
 }
+
+Task.propTypes = {
+    data: PropTypes.object.isRequired,
+    onToggle: PropTypes.func.isRequired,
+    disabled: PropTypes.bool.isRequired,
+    onDelete: PropTypes.func.isRequired
+};
 
 export default Task;
