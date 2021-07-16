@@ -1,56 +1,57 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Card, Button } from 'react-bootstrap';
 import styles from './task.module.css';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-class Task extends Component {
+class Task extends PureComponent {
 
 
     handleChange = () => {
         const { data, onToggle } = this.props;
         onToggle(data._id);
-     
+
     };
 
     render() {
 
         const task = this.props.data;
-        const { disabled, onDelete, selected} = this.props;
-        
+        const { disabled, onDelete, selected, onEdit } = this.props;
+
 
         return (
             <Card className={`${styles.task} ${selected ? styles.selected : ""}`}>
                 <Card.Body>
                     <input
                         type="checkbox"
-                        onChange={this.handleChange} 
-                        checked = {selected}
-                        />
+                        onChange={this.handleChange}
+                        checked={selected}
+                    />
                     <Card.Title>
                         {task.title}
                     </Card.Title>
                     <Card.Text>
-                    {task.description}
+                        {task.description}
                     </Card.Text>
+
                     <Button
-                    className='m-1'
-                    variant="warning"
-                    // disabled={disabled}
-                    // onClick={() => onDelete(task._id)}
-                >
-                <FontAwesomeIcon icon = {faEdit}/>
-                
-                </Button>
+                        className='m-1'
+                        variant="warning"
+                        // disabled={disabled}
+                        onClick={() => onEdit(task)}
+                    >
+                        <FontAwesomeIcon icon={faEdit} />
+
+                    </Button>
                     <Button
                         className='m-1'
                         variant="danger"
                         disabled={disabled}
                         onClick={() => onDelete(task._id)}
                     >
-                    <FontAwesomeIcon icon = {faTrash}/>
-                    
+                        <FontAwesomeIcon icon={faTrash} />
+
                     </Button>
                 </Card.Body>
             </Card>

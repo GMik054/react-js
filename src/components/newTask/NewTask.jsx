@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import { Button,  FormControl, Modal } from 'react-bootstrap';
-import idGenerator from '../../helpers_/idGenerator.jsx';
+import { Button, FormControl, Modal } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-
-
 
 
 class NewTask extends Component {
@@ -14,7 +11,7 @@ class NewTask extends Component {
     }
 
     handleChange = (event) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
         this.setState({
             [name]: value
         })
@@ -36,7 +33,6 @@ class NewTask extends Component {
 
 
         const newTask = {
-            _id: idGenerator(),
             title: title,
             description: description
         };
@@ -46,54 +42,54 @@ class NewTask extends Component {
     };
 
     render() {
-        
+
         const { onClose } = this.props;
 
 
         return (
-<>
-            <Modal
-            show={true}
-            onHide={onClose}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                    Add new Task
-                </Modal.Title>
-            </Modal.Header>
-
-            <Modal.Body>
-                <FormControl
-                    placeholder="Title"
-                    onChange={this.handleChange}
-                    name='title'
-                    onKeyPress={this.handleKeyDown}
-                    className="mb-3"
-                />
-                <FormControl 
-                placeholder="Description"
-                as="textarea" 
-                rows={5}
-                name='description'
-                onChange={this.handleChange}
-                />
-            </Modal.Body>
-
-            <Modal.Footer>
-                <Button 
-                onClick={this.handleSubmit}
-                    variant="success"
+            <>
+                <Modal
+                    show={true}
+                    onHide={onClose}
+                    size="lg"
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
                 >
-                Add
-                </Button>
-                <Button onClick={onClose}>Cancel</Button>
-            </Modal.Footer>
-        </Modal>
+                    <Modal.Header closeButton>
+                        <Modal.Title id="contained-modal-title-vcenter">
+                            Add new Task
+                        </Modal.Title>
+                    </Modal.Header>
 
-   
+                    <Modal.Body>
+                        <FormControl
+                            placeholder="Title"
+                            onChange={this.handleChange}
+                            name='title'
+                            onKeyPress={this.handleKeyDown}
+                            className="mb-3"
+                        />
+                        <FormControl
+                            placeholder="Description"
+                            as="textarea"
+                            rows={5}
+                            name='description'
+                            onChange={this.handleChange}
+                        />
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                        <Button
+                            onClick={this.handleSubmit}
+                            variant="success"
+                        >
+                            Add
+                        </Button>
+                        <Button onClick={onClose}>Cancel</Button>
+                    </Modal.Footer>
+                </Modal>
+
+
             </>
         )
     }

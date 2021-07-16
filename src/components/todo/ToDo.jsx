@@ -4,6 +4,7 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import Task from "../Task/Task.jsx"
 import NewTask from "../newTask/NewTask"
 import Confirm from '../confirm.jsx';
+import EditTaskModal from '../EditTaskModal.jsx'
 
 class ToDo extends Component {
 
@@ -11,19 +12,77 @@ class ToDo extends Component {
         tasks: [],
         selectedTasks: new Set(),
         showConfirm: false,
-        openNewTaskModal: false
+        openNewTaskModal: false,
+        editTask: null
     }
 
+    componentDidMount() {
 
+        fetch('http://localhost:3001/task', {
+            method: 'GET',
+            headers: {
+                "Content-Type": 'application/json'
+            }
+        })
+            .then(async (response) => {
+
+                const res = await response.json();
+                console.log(res);
+
+                if (response.status >= 400 && response.status < 600) {
+                    if (res.error) {
+                        throw res.error;
+                    }
+                    else {
+                        throw new Error('Someting went wrong');
+                    }
+                }
+               
+
+                this.setState({
+                    tasks: res
+                });
+
+            })
+            .catch((error) => {
+                console.log('catch error', error);
+            });
+    }
 
     addTask = (newTask) => {
 
-        const tasks = [...this.state.tasks, newTask];
+        fetch('http://localhost:3001/task', {
+            method: 'POST',
+            body: JSON.stringify(newTask),
+            headers: {
+                "Content-Type": 'application/json'
+            }
+        })
+            .then(async (response) => {
 
-        this.setState({
-            tasks,
-            openNewTaskModal: false
-        });
+                const res = await response.json();
+
+                if (response.status >= 400 && response.status < 600) {
+                    if (res.error) {
+                        throw res.error;
+                    }
+                    else {
+                        throw new Error('Someting went wrong');
+                    }
+                }
+
+                const tasks = [...this.state.tasks, res];
+
+                this.setState({
+                    tasks,
+                    openNewTaskModal: false
+                });
+
+            })
+            .catch((error) => {
+                console.log('catch error', error);
+            });
+
 
     };
 
@@ -87,14 +146,29 @@ class ToDo extends Component {
         });
     };
 
-    toggleNewTaskModal=()=>{
+    toggleNewTaskModal = () => {
         this.setState({
             openNewTaskModal: !this.state.openNewTaskModal
         });
     };
 
+    handleEdit = (editTask) => {
+        this.setState({ editTask })
+    }
+
+    handleSaveTask = (editedTask) => {
+        const tasks = [...this.state.tasks];
+        const foundIndex = tasks.findIndex((task) => task._id === editedTask._id);
+        tasks[foundIndex] = editedTask;
+
+        this.setState({
+            tasks,
+            editTask: null
+        });
+    };
+
     render() {
-        const { tasks, selectedTasks, showConfirm, openNewTaskModal } = this.state;
+        const { tasks, selectedTasks, showConfirm, openNewTaskModal, editTask } = this.state;
 
 
 
@@ -114,6 +188,7 @@ class ToDo extends Component {
                         disabled={!!selectedTasks.size}
                         onDelete={this.deleteTask}
                         selected={selectedTasks.has(task._id)}
+                        onEdit={this.handleEdit}
                     />
                 </Col>
             )
@@ -155,7 +230,8 @@ class ToDo extends Component {
                                 variant="danger"
                                 onClick={this.toggleConfirm}
                                 disabled={!selectedTasks.size}
-                            >Delete Selectid
+                            >
+                                Delete Selectid
                             </Button>
                         </Col>
                     </Row>
@@ -172,13 +248,21 @@ class ToDo extends Component {
                 />
                 }
                 {
-                    openNewTaskModal && 
+                    openNewTaskModal &&
                     <NewTask
-                    onClose={this.toggleNewTaskModal}
-                    onAdd={this.addTask}
-                />
+                        onClose={this.toggleNewTaskModal}
+                        onAdd={this.addTask}
+                    />
                 }
-               
+                {
+                    editTask && <EditTaskModal
+                        data={editTask}
+                        onClose={() => this.handleEdit(null)}
+                        onSave={this.handleSaveTask}
+                    />
+                }
+
+
             </>
         )
     }
