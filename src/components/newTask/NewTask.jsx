@@ -3,7 +3,7 @@ import { Button, FormControl, Modal } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {formatDate} from '../../helpers_/utils.jsx'
+import { formatDate } from '../../helpers_/utils.jsx'
 
 class NewTask extends Component {
 
@@ -34,20 +34,21 @@ class NewTask extends Component {
             return;
         }
 
+        const { date } = this.state;
 
         const newTask = {
             title: title,
             description: description,
-            date: formatDate(this.state.date.toISOString())
+            date: formatDate(date.toISOString())
         };
 
         this.props.onAdd(newTask);
 
     };
 
-    handleChangeDate=(value)=>{
+    handleChangeDate = (value) => {
         this.setState({
-            date: value
+            date: value || new Date()
         });
     };
 
@@ -87,9 +88,9 @@ class NewTask extends Component {
                             onChange={this.handleChange}
                         />
                         <DatePicker
-                        minDate= {new Date()}
-                        selected={this.state.date}
-                        onChange={this.handleChangeDate}
+                            minDate={new Date()}
+                            selected={this.state.date}
+                            onChange={this.handleChangeDate}
                         />
                     </Modal.Body>
 

@@ -27,7 +27,6 @@ class ToDo extends Component {
             .then(async (response) => {
 
                 const res = await response.json();
-                console.log(res);
 
                 if (response.status >= 400 && response.status < 600) {
                     if (res.error) {
@@ -99,7 +98,6 @@ class ToDo extends Component {
             .then(async (response) => {
 
                 const res = await response.json();
-                console.log(res);
 
                 if (response.status >= 400 && response.status < 600) {
                     if (res.error) {
@@ -145,7 +143,7 @@ class ToDo extends Component {
         const body = {
             tasks: [...selectedTasks]
         }
-        
+
 
         fetch(`http://localhost:3001/task`, {
             method: 'PATCH',
@@ -157,7 +155,6 @@ class ToDo extends Component {
             .then(async (response) => {
 
                 const res = await response.json();
-                console.log(res);
 
                 if (response.status >= 400 && response.status < 600) {
                     if (res.error) {
@@ -174,7 +171,7 @@ class ToDo extends Component {
                     }
                     return true;
                 });
-        
+
                 this.setState({
                     tasks: newTasks,
                     selectedTasks: new Set(),
@@ -231,7 +228,6 @@ class ToDo extends Component {
             .then(async (response) => {
 
                 const res = await response.json();
-                console.log(res);
 
                 if (response.status >= 400 && response.status < 600) {
                     if (res.error) {
@@ -245,7 +241,7 @@ class ToDo extends Component {
                 const tasks = [...this.state.tasks];
                 const foundIndex = tasks.findIndex((task) => task._id === editedTask._id);
                 tasks[foundIndex] = editedTask;
-        
+
                 this.setState({
                     tasks,
                     editTask: null
