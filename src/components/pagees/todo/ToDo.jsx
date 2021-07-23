@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 // import styles from './todo.module.css'
 import { Container, Row, Col, Button } from 'react-bootstrap';
-import Task from "../Task/Task.jsx"
-import NewTask from "../newTask/NewTask"
-import Confirm from '../confirm.jsx';
-import EditTaskModal from '../EditTaskModal.jsx'
+import Task from "../../Task/Task.jsx"
+import NewTask from "../../newTask/NewTask"
+import Confirm from '../../confirm.jsx';
+import EditTaskModal from '../../EditTaskModal.jsx';
 
 class ToDo extends Component {
 
@@ -284,7 +284,7 @@ class ToDo extends Component {
 
         return (
             <>
-                <h2>ToDo List</h2>
+                <br />
                 <Container>
 
 
