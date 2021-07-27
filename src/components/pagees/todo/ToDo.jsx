@@ -293,6 +293,7 @@ class ToDo extends Component {
                             <Button
                                 variant="primary"
                                 onClick={this.toggleNewTaskModal}
+                                disabled={selectedTasks.size}
                             >
                                 Add new Task
                             </Button>

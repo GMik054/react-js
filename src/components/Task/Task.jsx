@@ -4,7 +4,7 @@ import styles from './task.module.css';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { formatDate } from '../../helpers_/utils.jsx';
+import { formatDate, textTruncate } from '../../helpers_/utils.jsx';
 import {Link} from 'react-router-dom';
 
 class Task extends PureComponent {
@@ -30,13 +30,13 @@ class Task extends PureComponent {
                         onChange={this.handleChange}
                         checked={selected}
                     />
-                    <Link to='/task'>
+                    <Link to={`/task/${task._id}`}>
                     <Card.Title>
-                        {task.title}
+                        {textTruncate(task.title, 25)}
                     </Card.Title>
                     </Link>
                     <Card.Text>
-                        Description: {task.description}
+                        Description: {textTruncate(task.description, 60)}
                     </Card.Text>
                     <Card.Text>
                         Date: {formatDate(task.date)}
@@ -44,7 +44,7 @@ class Task extends PureComponent {
                     <Button
                         className='m-1'
                         variant="warning"
-                        // disabled={disabled}
+                        disabled={disabled}
                         onClick={() => onEdit(task)}
                     >
                         <FontAwesomeIcon icon={faEdit} />

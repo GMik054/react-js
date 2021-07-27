@@ -7,7 +7,7 @@ export default function NavMenu(){
     return (
         <Navbar bg="dark" variant="dark">
         <Navbar.Brand href="#home">ToDo List</Navbar.Brand>
-        <Nav ClassName="mr-auto">
+        <Nav className="mr-auto">
 
         <NavLink 
         to='/'

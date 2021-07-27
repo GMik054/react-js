@@ -5,7 +5,7 @@ import About from './components/pagees/About/About';
 import Contact from './components/pagees/Contact/Contact';
 import NotFound from './components/pagees/NotFound/NotFound';
 import NavMenu from './components/NavMenu/NavMenu';
-import taskPage from './components/pagees/taskPage/taskPage';
+import TaskPage from './components/pagees/TaskPage/TaskPage';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 function App() {
@@ -37,8 +37,8 @@ function App() {
             exact={true}
           />
           <Route
-            path='/task'
-            component={taskPage}
+            path='/task/:taskId'
+            component={TaskPage}
             exact={true}
           />
           <Route
