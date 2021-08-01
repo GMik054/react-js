@@ -5,7 +5,6 @@ state = {
     text1: "open",
     text2: "close",
     show: true
-
 };
 
 toggle = ()=>{
