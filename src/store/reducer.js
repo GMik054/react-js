@@ -1,43 +1,87 @@
+import * as actionTypes from './actionTypes';
 
 const defaultState = {
     tasks: [],
+    task: null,
     addTaskSuccess: false,
-    deleteTaskSuccess: false
+    deleteTaskSuccess: false,
+    editTasksSuccess: false,
+    loading: false,
+    successMessage: null,
+    errorMessage: null
 };
 
 export default function reducer(state = defaultState, action) {
 
     switch (action.type) {
 
-        case 'GET_TASKS': {
+        case actionTypes.PENDING: {
             return {
                 ...state,
-                tasks: action.tasks
+                loading: true,
+                addTaskSuccess: false,
+                deleteTaskSuccess: false,
+                editTasksSuccess: false,
+                editTaskSuccess: false,
+                successMessage: null,
+                errorMessage: null
             };
         }
-        case 'ADD_TASK': {
+
+        case actionTypes.ERROR: {
+            return {
+                ...state,
+                loading: false,
+                errorMessage: action.error
+            };
+        }
+
+        case actionTypes.GET_TASKS: {
+            return {
+                ...state,
+                tasks: action.tasks,
+                loading: false
+            };
+        }
+
+        case actionTypes.GET_TASK: {
+            return {
+                ...state,
+                task: action.task,
+                loading: false
+            };
+        }
+        case actionTypes.ADD_TASK: {
 
             return {
                 ...state,
                 tasks: [...state.tasks, action.task],
-                addTaskSuccess: true
+                addTaskSuccess: true,
+                loading: false,
+                successMessage: 'Task created successfully!'
+
             };
         }
-        case 'ADDING_TASK': {
 
+        case actionTypes.DELETE_TASK: {
+
+            
+            if (action.from === 'single') {
+                return {
+                    ...state,
+                    task: null,
+                    loading: false,
+                    successMessage: 'Task deleted successfully!'
+                };
+            };
             return {
                 ...state,
-                addTaskSuccess: false
+                tasks: state.tasks.filter((task) => action.taskID !== task._id),
+                loading: false,
+                successMessage: 'Task deleted successfully!'
             };
         }
-        case 'DELETE_TASK': {
-
-            return {
-                ...state,
-                tasks: state.tasks.filter((task) => action.taskID !== task._id)
-            };
-        }
-        case 'DELETE_TASKS': {
+        case actionTypes.DELETE_TASKS: {
             const newTasks = state.tasks.filter((task) => {
                 if (action.taskIDs.has(task._id)) {
                     return false;
@@ -47,14 +91,35 @@ export default function reducer(state = defaultState, action) {
             return {
                 ...state,
                 tasks: newTasks,
-                deleteTaskSuccess: true
+                editTasksSuccess: true,
+                loading: false,
+                successMessage: 'Tasks deleted successfully!'
             };
         }
-        case 'DELETING_TASKS': {
+
+        case actionTypes.EDIT_TASK: {
+
+            if (action.from === 'single') {
+                return {
+                    ...state,
+                    task: action.editedTask,
+                    editTaskSuccess: true,
+                    loading: false,
+                    successMessage: 'Task edited successfully!'
+                };
+            }
+
+            const tasks = [...state.tasks];
+            const foundIndex = tasks.findIndex((task) => task._id === action.editedTask._id);
+            tasks[foundIndex] = action.editedTask;
+
 
             return {
                 ...state,
-                deleteTaskSuccess: false
+                tasks,
+                editTasksSuccess: true,
+                loading: false,
+                successMessage: 'Task edited successfully!'
             };
         }
 

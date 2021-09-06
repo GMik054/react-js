@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ToDo from './components/pagees/todo/ToDo';
@@ -6,12 +7,44 @@ import Contact from './components/pagees/Contact/Contact';
 import NotFound from './components/pagees/NotFound/NotFound';
 import NavMenu from './components/NavMenu/NavMenu';
 import TaskPage from './components/pagees/TaskPage/TaskPage';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { Router, Route, Switch, Redirect } from 'react-router-dom';
+import Spinner from './components/Spinner/Spinner';
+import { connect } from 'react-redux';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import {history} from './helpers_/history';
 
-function App() {
+function App({ loading, successMessage, errorMessage }) {
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage, {
+        position: "bottom-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+        });
+    }
+
+    if (errorMessage) {
+      toast.error(errorMessage, {
+        position: "bottom-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+        });
+    }
+
+  }, [successMessage, errorMessage]);
+
+
   return (
     <div className="App">
-      <BrowserRouter>
+      <Router history={history}>
 
         <NavMenu />
 
@@ -50,9 +83,22 @@ function App() {
           <Redirect to='/not-found' />
 
         </Switch>
-      </BrowserRouter>
+      </Router>
+      {loading && <Spinner />}
+      <ToastContainer />
+
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    loading: state.loading,
+    successMessage: state.successMessage,
+    errorMessage: state.errorMessage
+  };
+};
+
+
+
+export default connect(mapStateToProps)(App);

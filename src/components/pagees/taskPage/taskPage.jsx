@@ -4,11 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { formatDate } from '../../../helpers_/utils';
 import EditTaskModal from '../../EditTaskModal';
+import { getTask, deleteTask } from '../../../store/actions';
+import { connect } from 'react-redux';
 
-export default class TaskPage extends Component {
+
+class TaskPage extends Component {
 
     state = {
-        task: null,
         openEditModal: false
     }
 
@@ -16,103 +18,17 @@ export default class TaskPage extends Component {
 
 
         const taskId = this.props.match.params.taskId;
-        fetch(`http://localhost:3001/task/${taskId}`, {
-            method: 'GET',
-            headers: {
-                "Content-Type": 'application/json'
-            }
-        })
-            .then(async (response) => {
+        this.props.getTask(taskId);
 
-                const res = await response.json();
-
-                if (response.status >= 400 && response.status < 600) {
-                    if (res.error) {
-                        throw res.error;
-                    }
-                    else {
-                        throw new Error('Someting went wrong');
-                    }
-                }
-
-
-                this.setState({
-                    task: res
-                });
-
-            })
-            .catch((error) => {
-                console.log('catch error', error);
-            });
     }
 
     deleteTask = () => {
 
-        const taskId = this.state.task._id;
-
-        fetch(`http://localhost:3001/task/${taskId}`, {
-            method: 'DELETE',
-            headers: {
-                "Content-Type": 'application/json'
-            }
-        })
-            .then(async (response) => {
-
-                const res = await response.json();
-
-                if (response.status >= 400 && response.status < 600) {
-                    if (res.error) {
-                        throw res.error;
-                    }
-                    else {
-                        throw new Error('Someting went wrong');
-                    }
-                }
-
-
-                this.props.history.push('/');
-
-            })
-            .catch((error) => {
-                console.log('catch error', error);
-            });
+        const taskId = this.props.task._id;
+        this.props.deleteTask(taskId, 'single');
 
     }
 
-    handleSaveTask = (editedTask) => {
-        fetch(`http://localhost:3001/task/${editedTask._id}`, {
-            method: 'PUT',
-            headers: {
-                "Content-Type": 'application/json'
-            },
-            body: JSON.stringify(editedTask)
-        })
-            .then(async (response) => {
-
-                const res = await response.json();
-
-                if (response.status >= 400 && response.status < 600) {
-                    if (res.error) {
-                        throw res.error;
-                    }
-                    else {
-                        throw new Error('Someting went wrong');
-                    }
-                }
-
-
-
-                this.setState({
-                    task: res,
-                    openEditModal: false
-                });
-
-            })
-            .catch((error) => {
-                console.log('catch error', error);
-            });
-
-    }
 
     toggleEditModal = () => {
         this.setState({
@@ -122,7 +38,8 @@ export default class TaskPage extends Component {
 
 
     render() {
-        const { task, openEditModal } = this.state;
+        const { openEditModal } = this.state;
+        const { task } = this.props;
 
         return (
             <div className='mt-5'>
@@ -173,10 +90,23 @@ export default class TaskPage extends Component {
                     <EditTaskModal
                         data={task}
                         onClose={this.toggleEditModal}
-                        onSave={this.handleSaveTask}
+                        from='single'
                     />
                 }
             </div>
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        task: state.task
+    };
+};
+
+const mapDispatchToProps = {
+    getTask,
+    deleteTask
+
+};
+export default connect(mapStateToProps, mapDispatchToProps)(TaskPage);
