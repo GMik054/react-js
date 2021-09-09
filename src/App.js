@@ -12,31 +12,28 @@ import Spinner from './components/Spinner/Spinner';
 import { connect } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {history} from './helpers_/history';
+import { history } from './helpers_/history';
+
+
+
+const toastProps = {
+  position: "bottom-left",
+  autoClose: 3000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true
+}
 
 function App({ loading, successMessage, errorMessage }) {
 
   useEffect(() => {
     if (successMessage) {
-      toast.success(successMessage, {
-        position: "bottom-left",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true
-        });
+      toast.success(successMessage, toastProps);
     }
 
     if (errorMessage) {
-      toast.error(errorMessage, {
-        position: "bottom-left",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true
-        });
+      toast.error(errorMessage, toastProps);
     }
 
   }, [successMessage, errorMessage]);
