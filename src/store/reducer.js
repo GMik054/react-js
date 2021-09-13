@@ -4,8 +4,9 @@ const defaultState = {
     tasks: [],
     task: null,
     addTaskSuccess: false,
-    deleteTaskSuccess: false,
+    deleteTasksSuccess: false,
     editTasksSuccess: false,
+    editTaskSuccess: false,
     loading: false,
     successMessage: null,
     errorMessage: null
@@ -20,7 +21,7 @@ export default function reducer(state = defaultState, action) {
                 ...state,
                 loading: true,
                 addTaskSuccess: false,
-                deleteTaskSuccess: false,
+                deleteTasksSuccess: false,
                 editTasksSuccess: false,
                 editTaskSuccess: false,
                 successMessage: null,
@@ -105,7 +106,7 @@ export default function reducer(state = defaultState, action) {
                     task: action.editedTask,
                     editTaskSuccess: true,
                     loading: false,
-                    successMessage: 'Task edited successfully!'
+                    successMessage: 'Task edited successfully!rrr'
                 };
             }
 

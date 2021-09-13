@@ -34,7 +34,7 @@ class ToDo extends Component {
             return;
         }
 
-        if (!prevProps.deleteTaskSuccess && this.props.deleteTaskSuccess) {
+        if (!prevProps.deleteTasksSuccess && this.props.deleteTasksSuccess) {
             this.setState({
                 selectedTasks: new Set(),
                 showConfirm: false
@@ -42,6 +42,12 @@ class ToDo extends Component {
             return;
         }
 
+        if (!prevProps.editTasksSuccess && this.props.editTasksSuccess) {
+            this.setState({
+                editTask: null
+            })
+            return;
+        }
         if (!prevProps.editTaskSuccess && this.props.editTaskSuccess) {
             this.setState({
                 editTask: null
@@ -372,8 +378,9 @@ const mapStateToProps = (state) => {
     return {
         tasks: state.tasks,
         addTaskSuccess: state.addTaskSuccess,
-        deleteTaskSuccess: state.deleteTaskSuccess,
-        editTaskSuccess: state.editTaskSuccess
+        deleteTasksSuccess: state.deleteTasksSuccess,
+        editTasksSuccess: state.editTasksSuccess,
+        editTaskSuccess: state.editTaskSuccess,
     };
 };
 
